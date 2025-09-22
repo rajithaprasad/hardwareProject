@@ -39,6 +39,9 @@ export default function QuotationView({ canModify }: QuotationViewProps) {
       const data = await response.json();
       setMaterials(data.map((material: any) => ({
         ...material,
+        unitCost: parseFloat(material.unitCost) || 0,
+        quantity: parseInt(material.quantity) || 0,
+        minStockLevel: parseInt(material.minStockLevel) || 0,
         lastUpdated: new Date(material.lastUpdated)
       })));
     } catch (error) {

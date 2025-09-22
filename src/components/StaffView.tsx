@@ -39,6 +39,9 @@ export default function StaffView({ canModify }: StaffViewProps) {
   const fetchStaff = async () => {
     try {
       const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/get_staff.php');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       if (Array.isArray(data)) {
         setStaff(data);
@@ -48,7 +51,7 @@ export default function StaffView({ canModify }: StaffViewProps) {
       }
     } catch (error) {
       console.error('Error fetching staff:', error);
-      toast.error('Failed to fetch staff');
+      toast.error('Failed to fetch staff. Please check your connection.');
       setStaff([]);
     }
   };
