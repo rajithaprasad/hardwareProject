@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Layers, 
   Building2, 
@@ -9,7 +9,9 @@ import {
   Settings,
   UserPlus,
   ChevronRight,
-  Clock
+  Clock,
+  Menu,
+  X
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -38,19 +40,34 @@ const employeeMenuItems = [
 ];
 
 export default function Sidebar({ activeSection, onSectionChange, userRole }: SidebarProps) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const menuItems = userRole === 'employee' ? employeeMenuItems : adminMenuItems;
 
   return (
-    <div className="w-64 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-r border-gray-200/50 dark:border-slate-700/50 h-full flex flex-col">
+    <div className={`${isCollapsed ? 'w-16' : 'w-64'} bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-r border-gray-200/50 dark:border-slate-700/50 h-full flex flex-col transition-all duration-300`}>
       {/* Logo Section */}
       <div className="p-6 border-b border-gray-200 dark:border-slate-700">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
-            <Building2 className="w-6 h-6 text-white" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
+              <Building2 className="w-6 h-6 text-white" />
+            </div>
+            {!isCollapsed && (
+              <div>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">MaterialFlow</h2>
+              </div>
+            )}
           </div>
-          <div>
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white">MaterialFlow</h2>
-            <p className="text-xs text-gray-600 dark:text-gray-400">Management System</p>
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+          >
+            {isCollapsed ? (
+              <Menu className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+            ) : (
+              <X className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+            )}
+          </button>
           </div>
         </div>
       </div>
@@ -66,19 +83,22 @@ export default function Sidebar({ activeSection, onSectionChange, userRole }: Si
               <li key={item.id}>
                 <button
                   onClick={() => onSectionChange(item.id)}
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 group ${
+                  className={`w-full flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} px-4 py-3 rounded-xl transition-all duration-200 group ${
                     isActive
                       ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700/50'
                   }`}
+                  title={isCollapsed ? item.label : undefined}
                 >
                   <div className="flex items-center gap-3">
                     <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`} />
-                    <span className="font-medium">{item.label}</span>
+                    {!isCollapsed && <span className="font-medium">{item.label}</span>}
                   </div>
-                  <ChevronRight className={`w-4 h-4 transition-transform ${
-                    isActive ? 'text-white rotate-90' : 'text-gray-400 group-hover:translate-x-1'
-                  }`} />
+                  {!isCollapsed && (
+                    <ChevronRight className={`w-4 h-4 transition-transform ${
+                      isActive ? 'text-white rotate-90' : 'text-gray-400 group-hover:translate-x-1'
+                    }`} />
+                  )}
                 </button>
               </li>
             );
@@ -87,13 +107,15 @@ export default function Sidebar({ activeSection, onSectionChange, userRole }: Si
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-200 dark:border-slate-700">
-        <div className="text-center">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            © 2025 MaterialFlow Pro
-          </p>
+      {!isCollapsed && (
+        <div className="p-4 border-t border-gray-200 dark:border-slate-700">
+          <div className="text-center">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              © 2025 MaterialFlow Pro
+            </p>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
