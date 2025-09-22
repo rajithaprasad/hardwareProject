@@ -325,17 +325,17 @@ export default function Dashboard({ user }: DashboardProps) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
-        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-slate-700/50 px-6 py-4 flex-shrink-0">
+        <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-b border-slate-200/30 dark:border-slate-700/30 px-6 py-4 flex-shrink-0 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                className="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-200 border border-slate-200 dark:border-slate-700 shadow-sm"
               >
                 {isSidebarCollapsed ? (
-                  <ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  <ChevronRight className="w-5 h-5 text-slate-600 dark:text-slate-400" />
                 ) : (
-                  <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  <ChevronLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" />
                 )}
               </button>
               {(selectedCategoryId || selectedMaterialId) && activeSection === 'categories' && (
@@ -347,7 +347,7 @@ export default function Dashboard({ user }: DashboardProps) {
                       setSelectedCategoryId(null);
                     }
                   }}
-                  className="flex items-center gap-2 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                  className="flex items-center gap-2 px-4 py-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all duration-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800"
                 >
                   ← Back
                 </button>
@@ -360,7 +360,7 @@ export default function Dashboard({ user }: DashboardProps) {
                   {canModify && (
                     <button
                       onClick={() => setShowAddCategoryModal(true)}
-                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/30 transform hover:-translate-y-0.5"
                     >
                       <Plus className="w-4 h-4" />
                       Add Category
@@ -369,7 +369,7 @@ export default function Dashboard({ user }: DashboardProps) {
                   {canWithdrawFromStock && (
                     <button
                       onClick={() => setShowQRScanner(true)}
-                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transform hover:-translate-y-0.5"
                     >
                       <QrCode className="w-4 h-4" />
                       QR Scanner
@@ -382,7 +382,7 @@ export default function Dashboard({ user }: DashboardProps) {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-auto p-6 bg-slate-50/50 dark:bg-slate-900/50">
           {renderContent()}
         </div>
       </div>

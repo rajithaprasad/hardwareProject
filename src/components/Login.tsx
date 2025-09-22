@@ -62,7 +62,7 @@ export default function Login({ onLogin }: LoginProps) {
       {/* Theme Toggle */}
       <button
         onClick={toggleTheme}
-        className="fixed top-6 right-6 p-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-200 dark:border-slate-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 z-10"
+        className="fixed top-6 right-6 p-3 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 z-10"
       >
         {isDark ? (
           <Sun className="w-5 h-5 text-yellow-500" />
@@ -72,21 +72,21 @@ export default function Login({ onLogin }: LoginProps) {
       </button>
       <div className="max-w-md w-full">
         {/* Background Card */}
-        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200/50 dark:border-slate-700/50 p-8 transition-colors duration-300">
+        <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-200/50 dark:border-slate-700/50 p-8 transition-colors duration-300">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-3xl mb-6 shadow-lg">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-3xl mb-6 shadow-lg">
               <Building2 className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-2">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent mb-2">
               MaterialFlow Pro
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 text-lg">
+            <p className="text-slate-600 dark:text-slate-400 text-lg font-medium">
               Construction Material Management
             </p>
-            <div className="flex items-center justify-center gap-2 mt-3 px-4 py-2 bg-orange-50 dark:bg-orange-900/20 rounded-full">
-              <Shield className="w-4 h-4 text-orange-600 dark:text-orange-400" />
-              <span className="text-sm font-medium text-orange-700 dark:text-orange-300">
+            <div className="flex items-center justify-center gap-2 mt-4 px-4 py-2 bg-blue-50 dark:bg-blue-900/20 rounded-full">
+              <Shield className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
                 Multi-Role Access
               </span>
             </div>
@@ -96,7 +96,7 @@ export default function Login({ onLogin }: LoginProps) {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="flex items-center gap-3 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-4 rounded-xl border border-red-200 dark:border-red-800">
+              <div className="flex items-center gap-3 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-4 rounded-2xl border border-red-200 dark:border-red-800">
                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
                 <span className="text-sm font-medium">{error}</span>
               </div>
@@ -105,18 +105,18 @@ export default function Login({ onLogin }: LoginProps) {
               <div>
                 <label
                   htmlFor="username"
-                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3"
+                  className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3"
                 >
                   Username
                 </label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
+                  <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-500" />
                   <input
                     id="username"
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:focus:ring-orange-400 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 transition-all duration-200 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 shadow-sm"
                     placeholder="Enter your username"
                     required
                   />
@@ -125,18 +125,18 @@ export default function Login({ onLogin }: LoginProps) {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3"
+                  className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3"
                 >
                   Password
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
+                  <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-500" />
                   <input
                     id="password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:focus:ring-orange-400 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 transition-all duration-200 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 shadow-sm"
                     placeholder="Enter your password"
                     required
                   />
@@ -146,7 +146,7 @@ export default function Login({ onLogin }: LoginProps) {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-slate-400 disabled:to-slate-500 text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transform hover:-translate-y-0.5 disabled:transform-none"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center gap-3">
@@ -161,8 +161,8 @@ export default function Login({ onLogin }: LoginProps) {
               )}
             </button>
           </form>
-          <div className="mt-8 pt-6 border-t border-gray-200 dark:border-slate-700 text-center">
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+          <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700 text-center">
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
               © 2025 MaterialFlow Pro. Advanced Construction Management
               Platform.
             </p>
