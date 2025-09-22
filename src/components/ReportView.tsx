@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BarChart3, Filter, Download, Calendar, Building2, User, Package } from 'lucide-react';
 import { Material, Transaction, ConstructionSite } from '../types/material';
 import { toast } from 'react-hot-toast';
+import { mockMaterials, mockTransactions, mockConstructionSites, mockUsers } from '../data/mockData';
 
 interface Staff {
   id: string;
