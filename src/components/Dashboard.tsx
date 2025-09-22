@@ -12,6 +12,9 @@ import QRScannerModal from './QRScannerModal';
 import ConstructionSiteSettingsModal from './ConstructionSiteSettingsModal';
 import ConfirmationModal from './ConfirmationModal';
 import StaffView from './StaffView';
+import AddConstructionSiteModal from './AddConstructionSiteModal';
+import QuotationView from './QuotationView';
+import ReportView from './ReportView';
 import { Category, Material, Transaction, ConstructionSite } from '../types/material';
 
 interface DashboardProps {
@@ -31,7 +34,7 @@ export default function Dashboard({ user }: DashboardProps) {
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
   const [showAddMaterialModal, setShowAddMaterialModal] = useState(false);
   const [showQRScanner, setShowQRScanner] = useState(false);
-  const [showConstructionSiteModal, setShowConstructionSiteModal] = useState(false);
+  const [showAddConstructionSiteModal, setShowAddConstructionSiteModal] = useState(false);
   const [confirmationModal, setConfirmationModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -255,12 +258,18 @@ export default function Dashboard({ user }: DashboardProps) {
     });
   };
 
-  const handleAddConstructionSite = async (name: string, address: string) => {
+  const handleAddConstructionSite = async (siteData: {
+    name: string;
+    address: string;
+    startDate: string;
+    endDate: string;
+    siteManager: string;
+  }) => {
     try {
       const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/add_construction_site.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, address }),
+        body: JSON.stringify(siteData),
       });
       const result = await response.json();
       if (result.success) {
@@ -359,11 +368,11 @@ export default function Dashboard({ user }: DashboardProps) {
                 </div>
                 {canModify && (
                   <button
-                    onClick={() => setShowConstructionSiteModal(true)}
+                    onClick={() => setShowAddConstructionSiteModal(true)}
                     className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                   >
                     <Plus className="w-5 h-5" />
-                    Manage Sites
+                    Add Site
                   </button>
                 )}
               </div>
@@ -389,6 +398,16 @@ export default function Dashboard({ user }: DashboardProps) {
       case 'staff':
         return (
           <StaffView canModify={canModify} />
+        );
+
+      case 'quotation':
+        return (
+          <QuotationView canModify={canModify} />
+        );
+
+      case 'report':
+        return (
+          <ReportView canModify={canModify} />
         );
 
       case 'employees':
@@ -527,12 +546,10 @@ export default function Dashboard({ user }: DashboardProps) {
         />
       )}
 
-      {showConstructionSiteModal && (
-        <ConstructionSiteSettingsModal
-          constructionSites={constructionSites}
-          onClose={() => setShowConstructionSiteModal(false)}
+      {showAddConstructionSiteModal && (
+        <AddConstructionSiteModal
+          onClose={() => setShowAddConstructionSiteModal(false)}
           onAdd={handleAddConstructionSite}
-          onDelete={handleDeleteConstructionSite}
         />
       )}
 

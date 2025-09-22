@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Package } from "lucide-react";
+import { X, Package, Upload, Image, FileText } from "lucide-react";
 import { Category, Material } from "../types/material";
 
 interface AddMaterialModalProps {
@@ -36,25 +36,33 @@ export default function AddMaterialModal({
     "bundles",
     "pallets",
     "kilograms",
-    "Gram",
+    "grams",
     "liters",
     "milliliters",
   ],
 }: AddMaterialModalProps) {
   const [formData, setFormData] = useState({
     name: "",
+    supplierCode: "",
     description: "",
     unit: propUnits[0],
     currentStock: "",
     minStock: "",
     maxStock: "",
     unitCost: "",
+    discount: "",
+    supplier: "",
+    location: "",
     createdBy,
   });
 
   const [selectedCategory, setSelectedCategory] = useState(
     selectedCategoryId || (categories.length > 0 ? categories[0].id : "")
   );
+
+  const [productImage, setProductImage] = useState<File | null>(null);
+  const [documents, setDocuments] = useState<File[]>([]);
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   const handleCategoryChange = (categoryId: string) => {
     setSelectedCategory(categoryId);
@@ -67,7 +75,7 @@ export default function AddMaterialModal({
   ) => {
     const { name, value } = e.target;
     
-    if (name === "unitCost") {
+    if (name === "unitCost" || name === "discount") {
       const decimalRegex = /^[0-9]*\.?[0-9]*$/;
       if (value === "" || decimalRegex.test(value)) {
         setFormData((prev) => ({
@@ -81,6 +89,33 @@ export default function AddMaterialModal({
         [name]: value,
       }));
     }
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setProductImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDocumentUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setDocuments(prev => [...prev, ...files]);
+  };
+
+  const removeDocument = (index: number) => {
+    setDocuments(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const calculateCostWithDiscount = () => {
+    const cost = parseFloat(formData.unitCost) || 0;
+    const discount = parseFloat(formData.discount) || 0;
+    return cost - (cost * discount / 100);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -100,7 +135,7 @@ export default function AddMaterialModal({
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-gray-200/50 dark:border-slate-700/50 shadow-2xl">
+      <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gray-200/50 dark:border-slate-700/50 shadow-2xl">
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-slate-700">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg">
@@ -117,13 +152,32 @@ export default function AddMaterialModal({
             <X className="w-6 h-6 text-gray-500 dark:text-gray-400" />
           </button>
         </div>
+
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Product Image Upload */}
+          <div className="flex flex-col items-center mb-6">
+            <div className="w-32 h-32 bg-gray-100 dark:bg-slate-700 rounded-2xl flex items-center justify-center mb-4 overflow-hidden">
+              {imagePreview ? (
+                <img src={imagePreview} alt="Product preview" className="w-full h-full object-cover" />
+              ) : (
+                <Image className="w-12 h-12 text-gray-400 dark:text-gray-500" />
+              )}
+            </div>
+            <label className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-xl cursor-pointer transition-colors">
+              <Upload className="w-4 h-4" />
+              Upload Product Image
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+            </label>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
-              <label
-                htmlFor="category"
-                className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <label htmlFor="category" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Category *
               </label>
               <select
@@ -140,11 +194,9 @@ export default function AddMaterialModal({
                 ))}
               </select>
             </div>
+
             <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <label htmlFor="name" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Material Name *
               </label>
               <input
@@ -158,11 +210,54 @@ export default function AddMaterialModal({
                 placeholder="Enter material name"
               />
             </div>
+
             <div>
-              <label
-                htmlFor="unit"
-                className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <label htmlFor="supplierCode" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Supplier Material Code
+              </label>
+              <input
+                type="text"
+                id="supplierCode"
+                name="supplierCode"
+                value={formData.supplierCode}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:focus:ring-orange-400 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                placeholder="Enter supplier code"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="supplier" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Supplier Name
+              </label>
+              <input
+                type="text"
+                id="supplier"
+                name="supplier"
+                value={formData.supplier}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:focus:ring-orange-400 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                placeholder="Enter supplier name"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="location" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Storage Location
+              </label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:focus:ring-orange-400 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                placeholder="Enter storage location"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="unit" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Unit of Measurement *
               </label>
               <select
@@ -180,11 +275,9 @@ export default function AddMaterialModal({
                 ))}
               </select>
             </div>
+
             <div>
-              <label
-                htmlFor="unitCost"
-                className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <label htmlFor="unitCost" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Unit Cost ($) *
               </label>
               <input
@@ -200,12 +293,37 @@ export default function AddMaterialModal({
                 placeholder="0.00"
               />
             </div>
+
             <div>
-              <label
-                htmlFor="currentStock"
-                className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
-              >
-                Current Stock *
+              <label htmlFor="discount" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Discount (%)
+              </label>
+              <input
+                type="number"
+                id="discount"
+                name="discount"
+                value={formData.discount}
+                onChange={handleChange}
+                step="0.01"
+                min="0"
+                max="100"
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:focus:ring-orange-400 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                placeholder="0.00"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Cost with Discount ($)
+              </label>
+              <div className="w-full px-4 py-3 bg-gray-100 dark:bg-slate-600 border border-gray-200 dark:border-slate-600 rounded-xl text-gray-900 dark:text-white font-semibold">
+                ${calculateCostWithDiscount().toFixed(2)}
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="currentStock" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Quantity Added to Stock *
               </label>
               <input
                 type="number"
@@ -219,11 +337,9 @@ export default function AddMaterialModal({
                 placeholder="0"
               />
             </div>
+
             <div>
-              <label
-                htmlFor="minStock"
-                className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <label htmlFor="minStock" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Minimum Stock Level *
               </label>
               <input
@@ -238,11 +354,9 @@ export default function AddMaterialModal({
                 placeholder="0"
               />
             </div>
+
             <div>
-              <label
-                htmlFor="maxStock"
-                className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <label htmlFor="maxStock" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Maximum Stock Level *
               </label>
               <input
@@ -258,23 +372,64 @@ export default function AddMaterialModal({
               />
             </div>
           </div>
+
           <div>
-            <label
-              htmlFor="description"
-              className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
-            >
-              Description
+            <label htmlFor="description" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Product Description
             </label>
             <textarea
               id="description"
               name="description"
               value={formData.description}
               onChange={handleChange}
-              rows={3}
+              rows={4}
               className="w-full px-4 py-3 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:focus:ring-orange-400 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-              placeholder="Enter material description..."
+              placeholder="Enter detailed product description..."
             />
           </div>
+
+          {/* Document Upload */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Upload Documents
+            </label>
+            <div className="border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-xl p-6">
+              <div className="text-center">
+                <FileText className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+                <label className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-50 dark:bg-slate-700 hover:bg-gray-100 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-300 rounded-xl cursor-pointer transition-colors">
+                  <Upload className="w-4 h-4" />
+                  Choose Files
+                  <input
+                    type="file"
+                    multiple
+                    accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+                    onChange={handleDocumentUpload}
+                    className="hidden"
+                  />
+                </label>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  PDF, DOC, TXT, or Image files
+                </p>
+              </div>
+              {documents.length > 0 && (
+                <div className="mt-4 space-y-2">
+                  {documents.map((doc, index) => (
+                    <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-slate-700 rounded-lg">
+                      <span className="text-sm text-gray-700 dark:text-gray-300">{doc.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => removeDocument(index)}
+                        className="text-red-500 hover:text-red-700 dark:hover:text-red-400"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className="flex gap-4 pt-4">
             <button
               type="button"
