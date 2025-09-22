@@ -70,8 +70,6 @@ export default function Sidebar({ activeSection, onSectionChange, userRole }: Si
           </button>
           </div>
         </div>
-      </div>
-
       {/* Navigation Menu */}
       <nav className="flex-1 p-4">
         <ul className="space-y-2">
