@@ -92,11 +92,6 @@ export default function Sidebar({ activeSection, onSectionChange, userRole }: Si
                     <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`} />
                     {!isCollapsed && <span className="font-medium">{item.label}</span>}
                   </div>
-                  {!isCollapsed && (
-                    <ChevronRight className={`w-4 h-4 transition-transform ${
-                      isActive ? 'text-white rotate-90' : 'text-gray-400 group-hover:translate-x-1'
-                    }`} />
-                  )}
                 </button>
               </li>
             );
