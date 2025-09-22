@@ -59,7 +59,10 @@ export default function Dashboard({ user }: DashboardProps) {
     try {
       const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/categories.php');
       const data = await response.json();
-      setCategories(data);
+      setCategories(data.map((category: any) => ({
+        ...category,
+        createdAt: new Date(category.createdAt)
+      })));
     } catch (error) {
       console.error('Error fetching categories:', error);
       toast.error('Failed to fetch categories');
@@ -70,7 +73,10 @@ export default function Dashboard({ user }: DashboardProps) {
     try {
       const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/materials.php');
       const data = await response.json();
-      setMaterials(data);
+      setMaterials(data.map((material: any) => ({
+        ...material,
+        lastUpdated: new Date(material.lastUpdated)
+      })));
     } catch (error) {
       console.error('Error fetching materials:', error);
       toast.error('Failed to fetch materials');
