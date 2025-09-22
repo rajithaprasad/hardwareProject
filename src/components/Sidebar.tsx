@@ -8,16 +8,15 @@ import {
   BarChart3, 
   Settings,
   UserPlus,
-  ChevronRight,
   Clock,
-  Menu,
-  X
 } from 'lucide-react';
 
 interface SidebarProps {
   activeSection: string;
   onSectionChange: (section: string) => void;
   userRole: string;
+  isCollapsed: boolean;
+  onToggleCollapse: () => void;
 }
 
 const adminMenuItems = [
@@ -39,15 +38,14 @@ const employeeMenuItems = [
   { id: 'attendance', label: 'Attendance', icon: Clock },
 ];
 
-export default function Sidebar({ activeSection, onSectionChange, userRole }: SidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+export default function Sidebar({ activeSection, onSectionChange, userRole, isCollapsed, onToggleCollapse }: SidebarProps) {
   const menuItems = userRole === 'employee' ? employeeMenuItems : adminMenuItems;
 
   return (
     <div className={`${isCollapsed ? 'w-16' : 'w-64'} bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-r border-gray-200/50 dark:border-slate-700/50 h-full flex flex-col transition-all duration-300`}>
       {/* Logo Section */}
       <div className="p-6 border-b border-gray-200 dark:border-slate-700">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-center">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
               <Building2 className="w-6 h-6 text-white" />
@@ -58,18 +56,8 @@ export default function Sidebar({ activeSection, onSectionChange, userRole }: Si
               </div>
             )}
           </div>
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
-          >
-            {isCollapsed ? (
-              <Menu className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-            ) : (
-              <X className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-            )}
-          </button>
-          </div>
         </div>
+      </div>
       {/* Navigation Menu */}
       <nav className="flex-1 p-4">
         <ul className="space-y-2">

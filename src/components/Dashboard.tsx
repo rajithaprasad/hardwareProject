@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, QrCode, Building2 } from 'lucide-react';
+import { Plus, Search, QrCode, Building2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast, Toaster } from 'react-hot-toast';
 import Sidebar from './Sidebar';
 import CategoryView from './CategoryView';
@@ -36,6 +36,7 @@ interface DashboardProps {
 
 export default function Dashboard({ user }: DashboardProps) {
   const [activeSection, setActiveSection] = useState('categories');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [categories, setCategories] = useState<Category[]>(mockCategories);
   const [materials, setMaterials] = useState<Material[]>(mockMaterials);
   const [transactions, setTransactions] = useState<Transaction[]>(mockTransactions);
@@ -317,6 +318,8 @@ export default function Dashboard({ user }: DashboardProps) {
         activeSection={activeSection} 
         onSectionChange={setActiveSection} 
         userRole={user.role}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
       />
 
       {/* Main Content */}
@@ -325,6 +328,16 @@ export default function Dashboard({ user }: DashboardProps) {
         <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-slate-700/50 px-6 py-4 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
+              <button
+                onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+              >
+                {isSidebarCollapsed ? (
+                  <ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                ) : (
+                  <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                )}
+              </button>
               {(selectedCategoryId || selectedMaterialId) && activeSection === 'categories' && (
                 <button
                   onClick={() => {
