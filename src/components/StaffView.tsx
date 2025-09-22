@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Users, Shield, Trash2, Search, Calendar, User } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { mockUsers } from '../data/mockData';
 import AddStaffModal from './AddStaffModal';
 import ConfirmationModal from './ConfirmationModal';
 
