@@ -22,6 +22,7 @@ const adminMenuItems = [
   { id: 'categories', label: 'Categories', icon: Layers },
   { id: 'construction-sites', label: 'Construction Sites', icon: Building2 },
   { id: 'employees', label: 'Employees', icon: Users },
+  { id: 'tools', label: 'Tools Management', icon: Settings },
   { id: 'staff', label: 'Staff Management', icon: UserPlus },
   { id: 'notes', label: 'Notes', icon: FileText },
   { id: 'quotation', label: 'Quotation', icon: Calculator },
@@ -31,6 +32,7 @@ const adminMenuItems = [
 
 const employeeMenuItems = [
   { id: 'categories', label: 'Categories', icon: Layers },
+  { id: 'tools', label: 'My Tools', icon: Settings },
   { id: 'notes', label: 'Notes', icon: FileText },
   { id: 'attendance', label: 'Attendance', icon: Clock },
 ];

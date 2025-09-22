@@ -403,6 +403,83 @@ export const mockAttendance: AttendanceRecord[] = [
   }
 ];
 
+export const mockTools: Tool[] = [
+  {
+    id: 't1',
+    toolBrand: 'DeWalt',
+    manufacturerSerialNumber: 'DW745-001234',
+    quantity: 2,
+    entryDate: new Date('2025-01-01'),
+    documents: ['warranty.pdf', 'manual.pdf'],
+    photos: ['https://images.pexels.com/photos/1249611/pexels-photo-1249611.jpeg?auto=compress&cs=tinysrgb&w=400'],
+    assignedEmployeeId: '3',
+    assignedEmployeeName: 'Mike Johnson',
+    createdBy: 'manager',
+    createdAt: new Date('2025-01-01')
+  },
+  {
+    id: 't2',
+    toolBrand: 'Makita',
+    manufacturerSerialNumber: 'XPH12Z-567890',
+    quantity: 1,
+    entryDate: new Date('2025-01-05'),
+    documents: ['receipt.pdf'],
+    photos: ['https://images.pexels.com/photos/1249611/pexels-photo-1249611.jpeg?auto=compress&cs=tinysrgb&w=400'],
+    assignedEmployeeId: '4',
+    assignedEmployeeName: 'Lisa Smith',
+    createdBy: 'manager',
+    createdAt: new Date('2025-01-05')
+  },
+  {
+    id: 't3',
+    toolBrand: 'Milwaukee',
+    manufacturerSerialNumber: 'M18-112233',
+    quantity: 3,
+    entryDate: new Date('2025-01-08'),
+    exitDate: new Date('2025-01-15'),
+    documents: [],
+    photos: [],
+    createdBy: 'manager',
+    createdAt: new Date('2025-01-08')
+  }
+];
+
+export const mockManagerNotes: ManagerNote[] = [
+  {
+    id: 'mn1',
+    title: 'Safety Training Required',
+    content: 'Please complete the safety training module by end of week. The certificate needs to be submitted to HR.',
+    targetEmployeeId: '3',
+    targetEmployeeName: 'Mike Johnson',
+    createdBy: '1',
+    createdByName: 'John Manager',
+    createdAt: new Date('2025-01-09T10:00:00'),
+    isRead: false
+  },
+  {
+    id: 'mn2',
+    title: 'Project Update Meeting',
+    content: 'There will be a project update meeting tomorrow at 2 PM in the conference room. Please bring your progress reports.',
+    targetEmployeeId: '4',
+    targetEmployeeName: 'Lisa Smith',
+    createdBy: '1',
+    createdByName: 'John Manager',
+    createdAt: new Date('2025-01-08T15:30:00'),
+    isRead: true
+  },
+  {
+    id: 'mn3',
+    title: 'Equipment Maintenance',
+    content: 'The assigned tools need maintenance check. Please schedule it with the maintenance team.',
+    targetEmployeeId: '5',
+    targetEmployeeName: 'David Wilson',
+    createdBy: '2',
+    createdByName: 'Sarah Director',
+    createdAt: new Date('2025-01-07T09:15:00'),
+    isRead: false
+  }
+];
+
 export const suppliers = [
   'LafargeHolcim',
   'Nucor Steel',

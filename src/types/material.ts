@@ -91,3 +91,30 @@ export interface AttendanceRecord {
   status: 'present' | 'absent' | 'in-progress';
   totalHours?: number;
 }
+
+export interface Tool {
+  id: string;
+  toolBrand: string;
+  manufacturerSerialNumber: string;
+  quantity: number;
+  entryDate: Date;
+  exitDate?: Date;
+  documents: string[];
+  photos: string[];
+  assignedEmployeeId?: string;
+  assignedEmployeeName?: string;
+  createdBy: string;
+  createdAt: Date;
+}
+
+export interface ManagerNote {
+  id: string;
+  title: string;
+  content: string;
+  targetEmployeeId: string;
+  targetEmployeeName: string;
+  createdBy: string;
+  createdByName: string;
+  createdAt: Date;
+  isRead: boolean;
+}

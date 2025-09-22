@@ -18,6 +18,8 @@ import ReportView from './ReportView';
 import NotesView from './NotesView';
 import AttendanceView from './AttendanceView';
 import EmployeesView from './EmployeesView';
+import ToolsView from './ToolsView';
+import ConstructionSitesView from './ConstructionSitesView';
 import { Category, Material, Transaction, ConstructionSite } from '../types/material';
 import { 
   mockCategories, 
@@ -243,46 +245,16 @@ export default function Dashboard({ user }: DashboardProps) {
         );
 
       case 'construction-sites':
+        return <ConstructionSitesView canModify={canModify} />;
+
+      case 'tools':
         return (
-          <div className="space-y-6">
-            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 dark:border-slate-700/50 p-6">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <Building2 className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Construction Sites</h1>
-                    <p className="text-gray-600 dark:text-gray-400">Manage construction site locations</p>
-                  </div>
-                </div>
-                {canModify && (
-                  <button
-                    onClick={() => setShowAddConstructionSiteModal(true)}
-                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                  >
-                    <Plus className="w-5 h-5" />
-                    Add Site
-                  </button>
-                )}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {constructionSites.map(site => (
-                  <div key={site.id} className="bg-gray-50 dark:bg-slate-700/50 rounded-xl p-4">
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{site.name}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{site.address}</p>
-                    <div className={`inline-flex px-2 py-1 rounded-full text-xs font-medium mt-2 ${
-                      site.isActive 
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                        : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
-                    }`}>
-                      {site.isActive ? 'Active' : 'Inactive'}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <ToolsView 
+            userRole={user.role} 
+            userId={userId} 
+            userName={user.full_name}
+            canModify={canModify}
+          />
         );
 
       case 'employees':
