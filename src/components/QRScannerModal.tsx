@@ -36,39 +36,23 @@ export default function QRScannerModal({
 
   // Fetch construction sites when modal opens
   useEffect(() => {
-    const fetchConstructionSites = async () => {
-      try {
-        const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/construction_sites.php');
-        const data = await response.json();
-        setConstructionSites(data);
-      } catch (error) {
-        console.error('Error fetching construction sites:', error);
-      }
-    };
-    fetchConstructionSites();
+    setConstructionSites(mockConstructionSites);
   }, []);
 
   const handleQRScan = async () => {
     if (!qrCode.trim()) return;
    
     setIsLoading(true);
-    try {
-      const response = await fetch(
-        `https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/get_material_by_qr.php?qrCode=${encodeURIComponent(qrCode.trim())}`
-      );
-      const data = await response.json();
-      if (response.ok) {
-        setScannedMaterial(data);
-        setStep('confirm');
-      } else {
-        alert(data.error || 'Material not found. Please check the QR code.');
-      }
-    } catch (error) {
-      console.error('Error fetching material:', error);
-      alert('Failed to fetch material. Please try again.');
-    } finally {
-      setIsLoading(false);
+    
+    // Find material by QR code in mock data
+    const material = mockMaterials.find(m => m.qrCode === qrCode.trim());
+    if (material) {
+      setScannedMaterial(material);
+      setStep('confirm');
+    } else {
+      alert('Material not found. Please check the QR code.');
     }
+    setIsLoading(false);
   };
 
   const handleScan = async (detectedCodes: { rawValue: string }[]) => {
@@ -77,23 +61,16 @@ export default function QRScannerModal({
       setQrCode(result);
       setUseCamera(false);
       setIsLoading(true);
-      try {
-        const response = await fetch(
-          `https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/get_material_by_qr.php?qrCode=${encodeURIComponent(result.trim())}`
-        );
-        const data = await response.json();
-        if (response.ok) {
-          setScannedMaterial(data);
-          setStep('confirm');
-        } else {
-          alert(data.error || 'Material not found. Please check the QR code.');
-        }
-      } catch (error) {
-        console.error('Error fetching material:', error);
-        alert('Failed to fetch material. Please try again.');
-      } finally {
-        setIsLoading(false);
+      
+      // Find material by QR code in mock data
+      const material = mockMaterials.find(m => m.qrCode === result.trim());
+      if (material) {
+        setScannedMaterial(material);
+        setStep('confirm');
+      } else {
+        alert('Material not found. Please check the QR code.');
       }
+      setIsLoading(false);
     }
   };
 

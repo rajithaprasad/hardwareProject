@@ -30,25 +30,8 @@ export default function QuotationView({ canModify }: QuotationViewProps) {
   const [quotationDate, setQuotationDate] = useState(new Date().toISOString().split('T')[0]);
 
   useEffect(() => {
-    fetchMaterials();
+    setMaterials(mockMaterials);
   }, []);
-
-  const fetchMaterials = async () => {
-    try {
-      const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/materials.php');
-      const data = await response.json();
-      setMaterials(data.map((material: any) => ({
-        ...material,
-        unitCost: parseFloat(material.unitCost) || 0,
-        quantity: parseInt(material.quantity) || 0,
-        minStockLevel: parseInt(material.minStockLevel) || 0,
-        lastUpdated: new Date(material.lastUpdated)
-      })));
-    } catch (error) {
-      console.error('Error fetching materials:', error);
-      toast.error('Failed to fetch materials');
-    }
-  };
 
   const addMaterialToQuotation = () => {
     if (!selectedMaterial || quantity <= 0) {

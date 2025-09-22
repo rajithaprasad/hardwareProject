@@ -32,50 +32,15 @@ export default function ReportView({ canModify }: ReportViewProps) {
   const [reportData, setReportData] = useState<Transaction[]>([]);
 
   useEffect(() => {
-    fetchData();
+    setMaterials(mockMaterials);
+    setTransactions(mockTransactions);
+    setConstructionSites(mockConstructionSites);
+    setStaff(mockUsers.filter(user => user.role === 'employee'));
   }, []);
 
   useEffect(() => {
     applyFilters();
   }, [filters, transactions]);
-
-  const fetchData = async () => {
-    try {
-      // Fetch materials
-      const materialsResponse = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/materials.php');
-      const materialsData = await materialsResponse.json();
-      setMaterials(materialsData.map((material: any) => ({
-        ...material,
-        unitCost: parseFloat(material.unitCost) || 0,
-        quantity: parseInt(material.quantity) || 0,
-        currentStock: parseInt(material.currentStock) || 0,
-        minStockLevel: parseInt(material.minStockLevel) || 0,
-        lastUpdated: new Date(material.lastUpdated)
-      })));
-
-      // Fetch transactions
-      const transactionsResponse = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/transactions.php');
-      const transactionsData = await transactionsResponse.json();
-      setTransactions(transactionsData.map((t: any) => ({
-        ...t,
-        quantity: parseInt(t.quantity) || 0,
-        timestamp: new Date(t.timestamp)
-      })));
-
-      // Fetch construction sites
-      const sitesResponse = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/construction_sites.php');
-      const sitesData = await sitesResponse.json();
-      setConstructionSites(sitesData);
-
-      // Fetch staff
-      const staffResponse = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/get_staff.php');
-      const staffData = await staffResponse.json();
-      setStaff(Array.isArray(staffData) ? staffData : []);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      toast.error('Failed to fetch report data');
-    }
-  };
 
   const applyFilters = () => {
     let filtered = [...transactions];

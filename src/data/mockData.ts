@@ -1,4 +1,4 @@
-import { Category, Subcategory, Material, Transaction, User, ConstructionSite } from '../types/material';
+import { Category, Material, Transaction, User, ConstructionSite } from '../types/material';
 
 export const mockUsers: User[] = [
   {
@@ -15,15 +15,27 @@ export const mockUsers: User[] = [
   },
   {
     id: '3',
-    username: 'employee',
+    username: 'employee1',
     role: 'employee',
-    fullName: 'Mike Employee'
+    fullName: 'Mike Johnson'
   },
   {
     id: '4',
+    username: 'employee2',
+    role: 'employee',
+    fullName: 'Lisa Smith'
+  },
+  {
+    id: '5',
+    username: 'employee3',
+    role: 'employee',
+    fullName: 'David Wilson'
+  },
+  {
+    id: '6',
     username: 'secretary',
     role: 'secretary',
-    fullName: 'Lisa Secretary'
+    fullName: 'Anna Secretary'
   }
 ];
 
@@ -31,30 +43,26 @@ export const mockConstructionSites: ConstructionSite[] = [
   {
     id: '1',
     name: 'Downtown Office Complex',
-    location: '123 Main St, Downtown',
-    isActive: true,
-    address: undefined
+    address: '123 Main St, Downtown',
+    isActive: true
   },
   {
     id: '2',
     name: 'Residential Tower A',
-    location: '456 Oak Ave, Westside',
-    isActive: true,
-    address: undefined
+    address: '456 Oak Ave, Westside',
+    isActive: true
   },
   {
     id: '3',
     name: 'Shopping Mall Extension',
-    location: '789 Commerce Blvd, Eastside',
-    isActive: true,
-    address: undefined
+    address: '789 Commerce Blvd, Eastside',
+    isActive: true
   },
   {
     id: '4',
     name: 'Industrial Warehouse',
-    location: '321 Industrial Way, North',
-    isActive: false,
-    address: undefined
+    address: '321 Industrial Way, North',
+    isActive: false
   }
 ];
 
@@ -93,99 +101,10 @@ export const mockCategories: Category[] = [
   }
 ];
 
-export const mockSubcategories: Subcategory[] = [
-  // Concrete & Masonry subcategories
-  {
-    id: '1',
-    categoryId: '1',
-    name: 'Portland Cement',
-    description: 'Various types of Portland cement',
-    createdAt: new Date('2025-01-01'),
-    createdBy: 'manager',
-    materialCount: 0
-  },
-  {
-    id: '2',
-    categoryId: '1',
-    name: 'Concrete Blocks',
-    description: 'Standard and specialty concrete blocks',
-    createdAt: new Date('2025-01-01'),
-    createdBy: 'manager',
-    materialCount: 0
-  },
-  {
-    id: '3',
-    categoryId: '1',
-    name: 'Aggregates',
-    description: 'Sand, gravel, and crushed stone',
-    createdAt: new Date('2025-01-01'),
-    createdBy: 'manager',
-    materialCount: 0
-  },
-  // Steel & Metal subcategories
-  {
-    id: '4',
-    categoryId: '2',
-    name: 'Reinforcement Bars',
-    description: 'Rebar in various sizes and grades',
-    createdAt: new Date('2025-01-01'),
-    createdBy: 'manager',
-    materialCount: 0
-  },
-  {
-    id: '5',
-    categoryId: '2',
-    name: 'Structural Steel',
-    description: 'Beams, columns, and structural components',
-    createdAt: new Date('2025-01-01'),
-    createdBy: 'manager',
-    materialCount: 0
-  },
-  // Lumber & Wood subcategories
-  {
-    id: '6',
-    categoryId: '3',
-    name: 'Dimensional Lumber',
-    description: 'Standard construction lumber',
-    createdAt: new Date('2025-01-01'),
-    createdBy: 'manager',
-    materialCount: 0
-  },
-  {
-    id: '7',
-    categoryId: '3',
-    name: 'Plywood & Panels',
-    description: 'Plywood, OSB, and engineered panels',
-    createdAt: new Date('2025-01-01'),
-    createdBy: 'manager',
-    materialCount: 0
-  },
-  // Electrical subcategories
-  {
-    id: '8',
-    categoryId: '4',
-    name: 'Wiring & Cable',
-    description: 'Electrical wiring and cables',
-    createdAt: new Date('2025-01-01'),
-    createdBy: 'manager',
-    materialCount: 0
-  },
-  {
-    id: '9',
-    categoryId: '4',
-    name: 'Conduits & Fittings',
-    description: 'Electrical conduits and fittings',
-    createdAt: new Date('2025-01-01'),
-    createdBy: 'manager',
-    materialCount: 0
-  }
-];
-
 export const mockMaterials: Material[] = [
-  // Portland Cement materials
   {
     id: '1',
-    subcategoryId: '1',
+    categoryId: '1',
     name: 'Type I Portland Cement',
     description: 'General purpose Portland cement, 94 lb bags',
     unit: 'bags',
@@ -203,7 +122,7 @@ export const mockMaterials: Material[] = [
   },
   {
     id: '2',
-    subcategoryId: '1',
+    categoryId: '1',
     name: 'Type III High Early Strength',
     description: 'High early strength Portland cement, 94 lb bags',
     unit: 'bags',
@@ -219,10 +138,9 @@ export const mockMaterials: Material[] = [
     createdBy: 'manager',
     category: undefined
   },
-  // Reinforcement Bars materials
   {
     id: '3',
-    subcategoryId: '4',
+    categoryId: '2',
     name: 'Rebar #4 Grade 60',
     description: '1/2" Grade 60 Rebar, 20ft lengths',
     unit: 'pieces',
@@ -240,7 +158,7 @@ export const mockMaterials: Material[] = [
   },
   {
     id: '4',
-    subcategoryId: '4',
+    categoryId: '2',
     name: 'Rebar #5 Grade 60',
     description: '5/8" Grade 60 Rebar, 20ft lengths',
     unit: 'pieces',
@@ -256,10 +174,9 @@ export const mockMaterials: Material[] = [
     createdBy: 'manager',
     category: undefined
   },
-  // Dimensional Lumber materials
   {
     id: '5',
-    subcategoryId: '6',
+    categoryId: '3',
     name: '2x4x8 Douglas Fir',
     description: 'Construction grade 2x4x8 Douglas Fir',
     unit: 'pieces',
@@ -277,7 +194,7 @@ export const mockMaterials: Material[] = [
   },
   {
     id: '6',
-    subcategoryId: '6',
+    categoryId: '3',
     name: '2x6x10 Douglas Fir',
     description: 'Construction grade 2x6x10 Douglas Fir',
     unit: 'pieces',
@@ -293,10 +210,9 @@ export const mockMaterials: Material[] = [
     createdBy: 'manager',
     category: undefined
   },
-  // Concrete Blocks materials
   {
     id: '7',
-    subcategoryId: '2',
+    categoryId: '1',
     name: '8x8x16 Standard Block',
     description: 'Standard concrete masonry unit',
     unit: 'pieces',
@@ -312,10 +228,9 @@ export const mockMaterials: Material[] = [
     createdBy: 'manager',
     category: undefined
   },
-  // Wiring materials
   {
     id: '8',
-    subcategoryId: '8',
+    categoryId: '4',
     name: '12 AWG THHN Wire',
     description: '12 gauge THHN solid copper wire, 500ft roll',
     unit: 'rolls',
@@ -341,7 +256,7 @@ export const mockTransactions: Transaction[] = [
     quantity: 50,
     reason: 'Foundation pour',
     constructionSite: 'Downtown Office Complex',
-    user: 'Mike Employee',
+    user: 'Mike Johnson',
     userRole: 'employee',
     timestamp: new Date('2025-01-10T09:30:00'),
     location: 'Downtown Office Complex'
@@ -352,7 +267,7 @@ export const mockTransactions: Transaction[] = [
     type: 'check-in',
     quantity: 100,
     reason: 'New delivery from supplier',
-    user: 'Lisa Secretary',
+    user: 'Anna Secretary',
     userRole: 'secretary',
     timestamp: new Date('2025-01-09T14:15:00')
   },
@@ -363,10 +278,128 @@ export const mockTransactions: Transaction[] = [
     quantity: 75,
     reason: 'Framing work',
     constructionSite: 'Residential Tower A',
-    user: 'Mike Employee',
+    user: 'Lisa Smith',
     userRole: 'employee',
     timestamp: new Date('2025-01-08T11:45:00'),
     location: 'Residential Tower A'
+  }
+];
+
+// New interfaces for notes and attendance
+export interface Note {
+  id: string;
+  employeeId: string;
+  employeeName: string;
+  constructionSiteId: string;
+  constructionSiteName: string;
+  title: string;
+  content: string;
+  imageUrl?: string;
+  createdAt: Date;
+}
+
+export interface AttendanceRecord {
+  id: string;
+  employeeId: string;
+  employeeName: string;
+  constructionSiteId: string;
+  constructionSiteName: string;
+  date: Date;
+  startTime?: Date;
+  endTime?: Date;
+  status: 'present' | 'absent' | 'in-progress';
+  totalHours?: number;
+}
+
+export const mockNotes: Note[] = [
+  {
+    id: 'n1',
+    employeeId: '3',
+    employeeName: 'Mike Johnson',
+    constructionSiteId: '1',
+    constructionSiteName: 'Downtown Office Complex',
+    title: 'Foundation Issues',
+    content: 'Found some cracks in the foundation that need immediate attention. Contacted supervisor.',
+    createdAt: new Date('2025-01-10T10:30:00')
+  },
+  {
+    id: 'n2',
+    employeeId: '4',
+    employeeName: 'Lisa Smith',
+    constructionSiteId: '2',
+    constructionSiteName: 'Residential Tower A',
+    title: 'Material Shortage',
+    content: 'Running low on 2x4 lumber. Need to order more for next week.',
+    createdAt: new Date('2025-01-09T15:20:00')
+  },
+  {
+    id: 'n3',
+    employeeId: '5',
+    employeeName: 'David Wilson',
+    constructionSiteId: '3',
+    constructionSiteName: 'Shopping Mall Extension',
+    title: 'Safety Concern',
+    content: 'Noticed loose scaffolding on the east side. Reported to safety officer.',
+    imageUrl: 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=400',
+    createdAt: new Date('2025-01-08T09:15:00')
+  }
+];
+
+export const mockAttendance: AttendanceRecord[] = [
+  {
+    id: 'a1',
+    employeeId: '3',
+    employeeName: 'Mike Johnson',
+    constructionSiteId: '1',
+    constructionSiteName: 'Downtown Office Complex',
+    date: new Date('2025-01-10'),
+    startTime: new Date('2025-01-10T08:00:00'),
+    endTime: new Date('2025-01-10T17:00:00'),
+    status: 'present',
+    totalHours: 9
+  },
+  {
+    id: 'a2',
+    employeeId: '4',
+    employeeName: 'Lisa Smith',
+    constructionSiteId: '2',
+    constructionSiteName: 'Residential Tower A',
+    date: new Date('2025-01-10'),
+    startTime: new Date('2025-01-10T07:30:00'),
+    endTime: new Date('2025-01-10T16:30:00'),
+    status: 'present',
+    totalHours: 9
+  },
+  {
+    id: 'a3',
+    employeeId: '5',
+    employeeName: 'David Wilson',
+    constructionSiteId: '3',
+    constructionSiteName: 'Shopping Mall Extension',
+    date: new Date('2025-01-10'),
+    startTime: new Date('2025-01-10T08:15:00'),
+    status: 'in-progress'
+  },
+  {
+    id: 'a4',
+    employeeId: '3',
+    employeeName: 'Mike Johnson',
+    constructionSiteId: '1',
+    constructionSiteName: 'Downtown Office Complex',
+    date: new Date('2025-01-09'),
+    startTime: new Date('2025-01-09T08:00:00'),
+    endTime: new Date('2025-01-09T17:30:00'),
+    status: 'present',
+    totalHours: 9.5
+  },
+  {
+    id: 'a5',
+    employeeId: '4',
+    employeeName: 'Lisa Smith',
+    constructionSiteId: '2',
+    constructionSiteName: 'Residential Tower A',
+    date: new Date('2025-01-09'),
+    status: 'absent'
   }
 ];
 

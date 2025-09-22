@@ -66,3 +66,28 @@ export interface ConstructionSite {
   location: string;
   isActive: boolean;
 }
+
+export interface Note {
+  id: string;
+  employeeId: string;
+  employeeName: string;
+  constructionSiteId: string;
+  constructionSiteName: string;
+  title: string;
+  content: string;
+  imageUrl?: string;
+  createdAt: Date;
+}
+
+export interface AttendanceRecord {
+  id: string;
+  employeeId: string;
+  employeeName: string;
+  constructionSiteId: string;
+  constructionSiteName: string;
+  date: Date;
+  startTime?: Date;
+  endTime?: Date;
+  status: 'present' | 'absent' | 'in-progress';
+  totalHours?: number;
+}

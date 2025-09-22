@@ -15,7 +15,17 @@ import StaffView from './StaffView';
 import AddConstructionSiteModal from './AddConstructionSiteModal';
 import QuotationView from './QuotationView';
 import ReportView from './ReportView';
+import NotesView from './NotesView';
+import AttendanceView from './AttendanceView';
+import EmployeesView from './EmployeesView';
 import { Category, Material, Transaction, ConstructionSite } from '../types/material';
+import { 
+  mockCategories, 
+  mockMaterials, 
+  mockTransactions, 
+  mockConstructionSites,
+  mockUsers 
+} from '../data/mockData';
 
 interface DashboardProps {
   user: { full_name: string; username: string; role: string };
@@ -24,10 +34,10 @@ interface DashboardProps {
 
 export default function Dashboard({ user }: DashboardProps) {
   const [activeSection, setActiveSection] = useState('categories');
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [materials, setMaterials] = useState<Material[]>([]);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [constructionSites, setConstructionSites] = useState<ConstructionSite[]>([]);
+  const [categories, setCategories] = useState<Category[]>(mockCategories);
+  const [materials, setMaterials] = useState<Material[]>(mockMaterials);
+  const [transactions, setTransactions] = useState<Transaction[]>(mockTransactions);
+  const [constructionSites, setConstructionSites] = useState<ConstructionSite[]>(mockConstructionSites);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [selectedMaterialId, setSelectedMaterialId] = useState<string | null>(null);
@@ -51,113 +61,31 @@ export default function Dashboard({ user }: DashboardProps) {
   const canAddToStock = ['manager', 'director', 'secretary'].includes(user.role);
   const canWithdrawFromStock = ['manager', 'director', 'employee'].includes(user.role);
 
-  // Fetch data on component mount
-  useEffect(() => {
-    fetchCategories();
-    fetchMaterials();
-    fetchTransactions();
-    fetchConstructionSites();
-  }, []);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/categories.php');
-      const data = await response.json();
-      setCategories(data.map((category: any) => ({
-        ...category,
-        createdAt: new Date(category.createdAt)
-      })));
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-      toast.error('Failed to fetch categories');
-    }
-  };
-
-  const fetchMaterials = async () => {
-    try {
-      const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/materials.php');
-      const data = await response.json();
-      setMaterials(data.map((material: any) => ({
-        ...material,
-        unitCost: parseFloat(material.unitCost) || 0,
-        quantity: parseInt(material.quantity) || 0,
-        minStockLevel: parseInt(material.minStockLevel) || 0,
-        lastUpdated: new Date(material.lastUpdated)
-      })));
-    } catch (error) {
-      console.error('Error fetching materials:', error);
-      toast.error('Failed to fetch materials');
-    }
-  };
-
-  const fetchTransactions = async () => {
-    try {
-      const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/transactions.php');
-      const data = await response.json();
-      setTransactions(data.map((t: any) => ({
-        ...t,
-        timestamp: new Date(t.timestamp)
-      })));
-    } catch (error) {
-      console.error('Error fetching transactions:', error);
-      toast.error('Failed to fetch transactions');
-    }
-  };
-
-  const fetchConstructionSites = async () => {
-    try {
-      const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/construction_sites.php');
-      const data = await response.json();
-      setConstructionSites(data);
-    } catch (error) {
-      console.error('Error fetching construction sites:', error);
-    }
-  };
+  // Get current user data
+  const currentUser = mockUsers.find(u => u.username === user.username);
+  const userId = currentUser?.id || '1';
 
   const handleAddCategory = async (categoryData: Omit<Category, 'id' | 'createdAt'>) => {
-    try {
-      const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/add_category.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(categoryData),
-      });
-      const result = await response.json();
-      if (result.success) {
-        toast.success('Category added successfully');
-        fetchCategories();
-      } else {
-        toast.error(result.message || 'Failed to add category');
-      }
-    } catch (error) {
-      console.error('Error adding category:', error);
-      toast.error('Failed to add category');
-    }
+    const newCategory: Category = {
+      ...categoryData,
+      id: `cat${Date.now()}`,
+      createdAt: new Date()
+    };
+    setCategories(prev => [...prev, newCategory]);
+    toast.success('Category added successfully');
   };
 
   const handleAddMaterial = async (materialData: Omit<Material, 'id' | 'lastUpdated' | 'status' | 'qrCode' | 'createdBy'> & { createdBy: string }) => {
-    try {
-      // Use a default subcategory ID since we're removing subcategories
-      const dataWithSubcategory = {
-        ...materialData,
-        subcategoryId: 'default-subcategory'
-      };
-      
-      const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/add_material.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dataWithSubcategory),
-      });
-      const result = await response.json();
-      if (result.success) {
-        toast.success('Material added successfully');
-        fetchMaterials();
-      } else {
-        toast.error(result.message || 'Failed to add material');
-      }
-    } catch (error) {
-      console.error('Error adding material:', error);
-      toast.error('Failed to add material');
-    }
+    const newMaterial: Material = {
+      ...materialData,
+      id: `mat${Date.now()}`,
+      qrCode: `QR-${materialData.name.toUpperCase().replace(/\s+/g, '-')}-${Date.now()}`,
+      lastUpdated: new Date(),
+      status: materialData.currentStock > materialData.minStock ? 'in-stock' : 
+              materialData.currentStock > 0 ? 'low-stock' : 'out-of-stock'
+    };
+    setMaterials(prev => [...prev, newMaterial]);
+    toast.success('Material added successfully');
   };
 
   const handleTransaction = async (
@@ -169,32 +97,39 @@ export default function Dashboard({ user }: DashboardProps) {
     user?: string,
     userRole?: string
   ) => {
-    try {
-      const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/transaction.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          materialId,
-          type,
-          quantity,
-          reason,
-          constructionSite,
-          user: user || user.full_name,
-          userRole: userRole || user.role,
-        }),
-      });
-      const result = await response.json();
-      if (result.success) {
-        toast.success(`Material ${type === 'check-in' ? 'added to' : 'withdrawn from'} stock successfully`);
-        fetchMaterials();
-        fetchTransactions();
-      } else {
-        toast.error(result.message || 'Transaction failed');
+    // Update material stock
+    setMaterials(prev => prev.map(material => {
+      if (material.id === materialId) {
+        const newStock = type === 'check-in' 
+          ? material.currentStock + quantity 
+          : material.currentStock - quantity;
+        
+        return {
+          ...material,
+          currentStock: Math.max(0, newStock),
+          status: newStock > material.minStock ? 'in-stock' : 
+                  newStock > 0 ? 'low-stock' : 'out-of-stock',
+          lastUpdated: new Date()
+        };
       }
-    } catch (error) {
-      console.error('Error processing transaction:', error);
-      toast.error('Transaction failed');
-    }
+      return material;
+    }));
+
+    // Add transaction record
+    const newTransaction: Transaction = {
+      id: `t${Date.now()}`,
+      materialId,
+      type,
+      quantity,
+      reason,
+      constructionSite,
+      user: user || user.full_name,
+      userRole: userRole || user.role,
+      timestamp: new Date()
+    };
+    setTransactions(prev => [newTransaction, ...prev]);
+    
+    toast.success(`Material ${type === 'check-in' ? 'added to' : 'withdrawn from'} stock successfully`);
   };
 
   const handleDeleteCategory = (categoryId: string) => {
@@ -206,24 +141,11 @@ export default function Dashboard({ user }: DashboardProps) {
       title: 'Delete Category',
       message: `Are you sure you want to delete "${category.name}"? This action cannot be undone.`,
       onConfirm: async () => {
-        try {
-          const response = await fetch(`https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/delete_category.php?id=${categoryId}`, {
-            method: 'DELETE',
-          });
-          const result = await response.json();
-          if (result.success) {
-            toast.success('Category deleted successfully');
-            fetchCategories();
-            if (selectedCategoryId === categoryId) {
-              setSelectedCategoryId(null);
-            }
-          } else {
-            toast.error(result.message || 'Failed to delete category');
-          }
-        } catch (error) {
-          console.error('Error deleting category:', error);
-          toast.error('Failed to delete category');
+        setCategories(prev => prev.filter(c => c.id !== categoryId));
+        if (selectedCategoryId === categoryId) {
+          setSelectedCategoryId(null);
         }
+        toast.success('Category deleted successfully');
         setConfirmationModal(prev => ({ ...prev, isOpen: false }));
       },
     });
@@ -238,24 +160,11 @@ export default function Dashboard({ user }: DashboardProps) {
       title: 'Delete Material',
       message: `Are you sure you want to delete "${material.name}"? This action cannot be undone.`,
       onConfirm: async () => {
-        try {
-          const response = await fetch(`https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/delete_material.php?id=${materialId}`, {
-            method: 'DELETE',
-          });
-          const result = await response.json();
-          if (result.success) {
-            toast.success('Material deleted successfully');
-            fetchMaterials();
-            if (selectedMaterialId === materialId) {
-              setSelectedMaterialId(null);
-            }
-          } else {
-            toast.error(result.message || 'Failed to delete material');
-          }
-        } catch (error) {
-          console.error('Error deleting material:', error);
-          toast.error('Failed to delete material');
+        setMaterials(prev => prev.filter(m => m.id !== materialId));
+        if (selectedMaterialId === materialId) {
+          setSelectedMaterialId(null);
         }
+        toast.success('Material deleted successfully');
         setConfirmationModal(prev => ({ ...prev, isOpen: false }));
       },
     });
@@ -268,41 +177,19 @@ export default function Dashboard({ user }: DashboardProps) {
     endDate: string;
     siteManager: string;
   }) => {
-    try {
-      const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/add_construction_site.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(siteData),
-      });
-      const result = await response.json();
-      if (result.success) {
-        toast.success('Construction site added successfully');
-        fetchConstructionSites();
-      } else {
-        toast.error(result.message || 'Failed to add construction site');
-      }
-    } catch (error) {
-      console.error('Error adding construction site:', error);
-      toast.error('Failed to add construction site');
-    }
+    const newSite: ConstructionSite = {
+      id: `site${Date.now()}`,
+      name: siteData.name,
+      address: siteData.address,
+      isActive: true
+    };
+    setConstructionSites(prev => [...prev, newSite]);
+    toast.success('Construction site added successfully');
   };
 
   const handleDeleteConstructionSite = async (siteId: string) => {
-    try {
-      const response = await fetch(`https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/delete_construction_site.php?id=${siteId}`, {
-        method: 'DELETE',
-      });
-      const result = await response.json();
-      if (result.success) {
-        toast.success('Construction site deleted successfully');
-        fetchConstructionSites();
-      } else {
-        toast.error(result.message || 'Failed to delete construction site');
-      }
-    } catch (error) {
-      console.error('Error deleting construction site:', error);
-      toast.error('Failed to delete construction site');
-    }
+    setConstructionSites(prev => prev.filter(site => site.id !== siteId));
+    toast.success('Construction site deleted successfully');
   };
 
   const renderContent = () => {
@@ -398,6 +285,29 @@ export default function Dashboard({ user }: DashboardProps) {
           </div>
         );
 
+      case 'employees':
+        return (
+          <EmployeesView canModify={canModify} />
+        );
+
+      case 'notes':
+        return (
+          <NotesView 
+            userRole={user.role} 
+            userId={userId} 
+            userName={user.full_name} 
+          />
+        );
+
+      case 'attendance':
+        return (
+          <AttendanceView 
+            userRole={user.role} 
+            userId={userId} 
+            userName={user.full_name} 
+          />
+        );
+
       case 'staff':
         return (
           <StaffView canModify={canModify} />
@@ -411,38 +321,6 @@ export default function Dashboard({ user }: DashboardProps) {
       case 'report':
         return (
           <ReportView canModify={canModify} />
-        );
-
-      case 'employees':
-        return (
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 dark:border-slate-700/50 p-6">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Employees</h1>
-            <p className="text-gray-600 dark:text-gray-400">Employee management coming soon...</p>
-          </div>
-        );
-
-      case 'notes':
-        return (
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 dark:border-slate-700/50 p-6">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Notes</h1>
-            <p className="text-gray-600 dark:text-gray-400">Notes management coming soon...</p>
-          </div>
-        );
-
-      case 'quotation':
-        return (
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 dark:border-slate-700/50 p-6">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Quotation</h1>
-            <p className="text-gray-600 dark:text-gray-400">Quotation management coming soon...</p>
-          </div>
-        );
-
-      case 'report':
-        return (
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 dark:border-slate-700/50 p-6">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Reports</h1>
-            <p className="text-gray-600 dark:text-gray-400">Report generation coming soon...</p>
-          </div>
         );
 
       case 'settings':
@@ -463,7 +341,11 @@ export default function Dashboard({ user }: DashboardProps) {
       <Toaster position="top-right" />
       
       {/* Sidebar */}
-      <Sidebar activeSection={activeSection} onSectionChange={setActiveSection} />
+      <Sidebar 
+        activeSection={activeSection} 
+        onSectionChange={setActiveSection} 
+        userRole={user.role}
+      />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -532,7 +414,6 @@ export default function Dashboard({ user }: DashboardProps) {
       {showAddMaterialModal && selectedCategoryId && (
         <AddMaterialModal
           categories={categories}
-          subcategories={[]} // Empty since we're removing subcategories
           selectedCategoryId={selectedCategoryId}
           onClose={() => setShowAddMaterialModal(false)}
           onAdd={handleAddMaterial}

@@ -8,15 +8,17 @@ import {
   BarChart3, 
   Settings,
   UserPlus,
-  ChevronRight
+  ChevronRight,
+  Clock
 } from 'lucide-react';
 
 interface SidebarProps {
   activeSection: string;
   onSectionChange: (section: string) => void;
+  userRole: string;
 }
 
-const menuItems = [
+const adminMenuItems = [
   { id: 'categories', label: 'Categories', icon: Layers },
   { id: 'construction-sites', label: 'Construction Sites', icon: Building2 },
   { id: 'employees', label: 'Employees', icon: Users },
@@ -27,7 +29,15 @@ const menuItems = [
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
-export default function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
+const employeeMenuItems = [
+  { id: 'categories', label: 'Categories', icon: Layers },
+  { id: 'notes', label: 'Notes', icon: FileText },
+  { id: 'attendance', label: 'Attendance', icon: Clock },
+];
+
+export default function Sidebar({ activeSection, onSectionChange, userRole }: SidebarProps) {
+  const menuItems = userRole === 'employee' ? employeeMenuItems : adminMenuItems;
+
   return (
     <div className="w-64 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-r border-gray-200/50 dark:border-slate-700/50 h-full flex flex-col">
       {/* Logo Section */}

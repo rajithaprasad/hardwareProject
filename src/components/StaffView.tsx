@@ -33,28 +33,8 @@ export default function StaffView({ canModify }: StaffViewProps) {
   });
 
   useEffect(() => {
-    fetchStaff();
+    setStaff(mockUsers);
   }, []);
-
-  const fetchStaff = async () => {
-    try {
-      const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/get_staff.php');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      if (Array.isArray(data)) {
-        setStaff(data);
-      } else {
-        console.error('Invalid staff data format:', data);
-        setStaff([]);
-      }
-    } catch (error) {
-      console.error('Error fetching staff:', error);
-      toast.error('Failed to fetch staff. Please check your connection.');
-      setStaff([]);
-    }
-  };
 
   const handleAddStaff = async (staffData: {
     username: string;
@@ -62,23 +42,15 @@ export default function StaffView({ canModify }: StaffViewProps) {
     full_name: string;
     role: string;
   }) => {
-    try {
-      const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/add_staff.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(staffData),
-      });
-      const result = await response.json();
-      if (result.success) {
-        toast.success('Staff member added successfully');
-        fetchStaff();
-      } else {
-        toast.error(result.message || 'Failed to add staff member');
-      }
-    } catch (error) {
-      console.error('Error adding staff:', error);
-      toast.error('Failed to add staff member');
-    }
+    const newStaff = {
+      id: `staff${Date.now()}`,
+      username: staffData.username,
+      fullName: staffData.full_name,
+      role: staffData.role,
+      created_at: new Date().toISOString()
+    };
+    setStaff(prev => [...prev, newStaff]);
+    toast.success('Staff member added successfully');
   };
 
   const handleDeleteStaff = (staffId: string) => {
@@ -88,23 +60,10 @@ export default function StaffView({ canModify }: StaffViewProps) {
     setConfirmationModal({
       isOpen: true,
       title: 'Delete Staff Member',
-      message: `Are you sure you want to delete "${staffMember.full_name}"? This action cannot be undone.`,
+      message: `Are you sure you want to delete "${staffMember.fullName}"? This action cannot be undone.`,
       onConfirm: async () => {
-        try {
-          const response = await fetch(`https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/delete_staff.php?id=${staffId}`, {
-            method: 'DELETE',
-          });
-          const result = await response.json();
-          if (result.success) {
-            toast.success('Staff member deleted successfully');
-            fetchStaff();
-          } else {
-            toast.error(result.message || 'Failed to delete staff member');
-          }
-        } catch (error) {
-          console.error('Error deleting staff:', error);
-          toast.error('Failed to delete staff member');
-        }
+        setStaff(prev => prev.filter(s => s.id !== staffId));
+        toast.success('Staff member deleted successfully');
         setConfirmationModal(prev => ({ ...prev, isOpen: false }));
       },
     });
@@ -131,7 +90,7 @@ export default function StaffView({ canModify }: StaffViewProps) {
   };
 
   const filteredStaff = staff.filter(member =>
-    member.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    member.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     member.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
     member.role.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -197,7 +156,7 @@ export default function StaffView({ canModify }: StaffViewProps) {
             </div>
 
             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
-              {member.full_name}
+              {member.fullName}
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">@{member.username}</p>
 
