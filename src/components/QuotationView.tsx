@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Calculator, Trash2, FileText, Download } from 'lucide-react';
 import { Material } from '../types/material';
 import { toast } from 'react-hot-toast';
+import { mockMaterials } from '../data/mockData';
 
 interface QuotationItem {
   id: string;
