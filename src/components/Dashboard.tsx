@@ -11,6 +11,7 @@ import TransactionModal from './TransactionModal';
 import QRScannerModal from './QRScannerModal';
 import ConstructionSiteSettingsModal from './ConstructionSiteSettingsModal';
 import ConfirmationModal from './ConfirmationModal';
+import StaffView from './StaffView';
 import { Category, Material, Transaction, ConstructionSite } from '../types/material';
 
 interface DashboardProps {
@@ -383,6 +384,11 @@ export default function Dashboard({ user }: DashboardProps) {
               </div>
             </div>
           </div>
+        );
+
+      case 'staff':
+        return (
+          <StaffView canModify={canModify} />
         );
 
       case 'employees':

@@ -7,6 +7,7 @@ import {
   Calculator, 
   BarChart3, 
   Settings,
+  UserPlus,
   ChevronRight
 } from 'lucide-react';
 
@@ -19,6 +20,7 @@ const menuItems = [
   { id: 'categories', label: 'Categories', icon: Layers },
   { id: 'construction-sites', label: 'Construction Sites', icon: Building2 },
   { id: 'employees', label: 'Employees', icon: Users },
+  { id: 'staff', label: 'Staff Management', icon: UserPlus },
   { id: 'notes', label: 'Notes', icon: FileText },
   { id: 'quotation', label: 'Quotation', icon: Calculator },
   { id: 'report', label: 'Report', icon: BarChart3 },
