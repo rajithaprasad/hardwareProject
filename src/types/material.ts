@@ -22,7 +22,7 @@ export interface Subcategory {
 export interface Material {
   category: ReactNode;
   id: string;
-  subcategoryId: string;
+  categoryId: string;
   name: string;
   description: string;
   unit: string;

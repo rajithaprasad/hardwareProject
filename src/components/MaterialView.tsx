@@ -1,9 +1,9 @@
 import React from 'react';
 import { Plus, Package, MapPin, DollarSign, QrCode, Calendar, User, Trash2 } from 'lucide-react';
-import { Subcategory, Material } from '../types/material';
+import { Category, Material } from '../types/material';
 
 interface MaterialViewProps {
-  subcategory: Subcategory;
+  category: Category;
   materials: Material[];
   onMaterialClick: (materialId: string) => void;
   canModify: boolean;
@@ -12,7 +12,7 @@ interface MaterialViewProps {
 }
 
 export default function MaterialView({
-  subcategory,
+  category,
   materials,
   onMaterialClick,
   canModify,
@@ -34,24 +34,24 @@ export default function MaterialView({
 
   return (
     <div className="space-y-6">
-      {/* Subcategory Header */}
+      {/* Category Header */}
       <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 dark:border-slate-700/50 p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
               <Package className="w-8 h-8 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{subcategory.name}</h1>
-              <p className="text-gray-600 dark:text-gray-400">{subcategory.description}</p>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{category.name}</h1>
+              <p className="text-gray-600 dark:text-gray-400">{category.description}</p>
               <div className="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
                 <div className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
-                  <span>Created {subcategory.createdAt.toLocaleDateString()}</span>
+                  <span>Created {category.createdAt.toLocaleDateString()}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <User className="w-4 h-4" />
-                  <span>by {subcategory.createdBy}</span>
+                  <span>by {category.createdBy}</span>
                 </div>
               </div>
             </div>
@@ -167,9 +167,9 @@ export default function MaterialView({
       {materials.length === 0 && (
         <div className="text-center py-12">
           <Package className="w-16 h-16 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No materials found</h3>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No materials found in this category</h3>
           <p className="text-gray-600 dark:text-gray-400">
-            {canModify ? 'Add the first material to get started' : 'This subcategory has no materials yet'}
+            {canModify ? 'Add the first material to get started' : 'This category has no materials yet'}
           </p>
         </div>
       )}

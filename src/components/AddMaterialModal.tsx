@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { X, Package } from "lucide-react";
-import { Category, Subcategory, Material } from "../types/material";
+import { Category, Material } from "../types/material";
 
 interface AddMaterialModalProps {
   categories: Category[];
-  subcategories: Subcategory[];
   selectedCategoryId?: string;
-  selectedSubcategoryId?: string;
   onClose: () => void;
   onAdd: (
     material: Omit<
@@ -20,9 +18,7 @@ interface AddMaterialModalProps {
 
 export default function AddMaterialModal({
   categories,
-  subcategories,
   selectedCategoryId,
-  selectedSubcategoryId,
   onClose,
   onAdd,
   createdBy,
@@ -46,7 +42,6 @@ export default function AddMaterialModal({
   ],
 }: AddMaterialModalProps) {
   const [formData, setFormData] = useState({
-    subcategoryId: selectedSubcategoryId || "",
     name: "",
     description: "",
     unit: propUnits[0],
@@ -61,19 +56,8 @@ export default function AddMaterialModal({
     selectedCategoryId || (categories.length > 0 ? categories[0].id : "")
   );
 
-  const availableSubcategories = subcategories.filter(
-    (sub) => sub.categoryId === selectedCategory
-  );
-
   const handleCategoryChange = (categoryId: string) => {
     setSelectedCategory(categoryId);
-    const firstSubcategory = subcategories.find(
-      (sub) => sub.categoryId === categoryId
-    );
-    setFormData((prev) => ({
-      ...prev,
-      subcategoryId: firstSubcategory?.id || "",
-    }));
   };
 
   const handleChange = (
@@ -104,6 +88,7 @@ export default function AddMaterialModal({
     const unitCostValue = formData.unitCost ? parseFloat(formData.unitCost) : 0;
     onAdd({
       ...formData,
+      categoryId: selectedCategory,
       currentStock: Number(formData.currentStock),
       minStock: Number(formData.minStock),
       maxStock: Number(formData.maxStock),
@@ -151,29 +136,6 @@ export default function AddMaterialModal({
                 {categories.map((category) => (
                   <option key={category.id} value={category.id}>
                     {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label
-                htmlFor="subcategoryId"
-                className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
-              >
-                Subcategory *
-              </label>
-              <select
-                id="subcategoryId"
-                name="subcategoryId"
-                value={formData.subcategoryId}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:focus:ring-orange-400 transition-all duration-200 text-gray-900 dark:text-white"
-              >
-                <option value="">Select subcategory...</option>
-                {availableSubcategories.map((subcategory) => (
-                  <option key={subcategory.id} value={subcategory.id}>
-                    {subcategory.name}
                   </option>
                 ))}
               </select>
