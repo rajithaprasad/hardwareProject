@@ -58,11 +58,11 @@ export default function Login({ onLogin }: LoginProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-slate-900 flex items-center justify-center p-4 transition-colors duration-300">
       {/* Theme Toggle */}
       <button
         onClick={toggleTheme}
-        className="fixed top-6 right-6 p-3 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 z-10"
+        className="fixed top-6 right-6 p-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-200 dark:border-slate-700 rounded-xl shadow-lg transition-all duration-300 z-10"
       >
         {isDark ? (
           <Sun className="w-5 h-5 text-yellow-500" />
@@ -72,24 +72,18 @@ export default function Login({ onLogin }: LoginProps) {
       </button>
       <div className="max-w-md w-full">
         {/* Background Card */}
-        <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-200/50 dark:border-slate-700/50 p-8 transition-colors duration-300">
+        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-slate-700/50 p-8 transition-colors duration-300">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-3xl mb-6 shadow-lg">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl mb-6 shadow-lg">
               <Building2 className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent mb-2">
-              MaterialFlow Pro
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400 text-lg font-medium">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               Construction Material Management
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Professional inventory system
             </p>
-            <div className="flex items-center justify-center gap-2 mt-4 px-4 py-2 bg-blue-50 dark:bg-blue-900/20 rounded-full">
-              <Shield className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                Multi-Role Access
-              </span>
-            </div>
           </div>
           {/* Demo Info */}
          
