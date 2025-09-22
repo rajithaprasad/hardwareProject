@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { X, QrCode, Package, MapPin, AlertTriangle, Minus, Camera } from 'lucide-react';
 import { Scanner } from '@yudiel/react-qr-scanner';
 import { Material, ConstructionSite } from '../types/material';
+import { mockConstructionSites, mockMaterials } from '../data/mockData';
 
 interface QRScannerModalProps {
   onClose: () => void;
