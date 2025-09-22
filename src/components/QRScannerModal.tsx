@@ -38,7 +38,7 @@ export default function QRScannerModal({
   useEffect(() => {
     const fetchConstructionSites = async () => {
       try {
-        const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/hardware_system_backend/construction_sites.php');
+        const response = await fetch('https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/construction_sites.php');
         const data = await response.json();
         setConstructionSites(data);
       } catch (error) {
@@ -79,7 +79,7 @@ export default function QRScannerModal({
       setIsLoading(true);
       try {
         const response = await fetch(
-          `https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/hardware_system_backend/get_material_by_qr.php?qrCode=${encodeURIComponent(result.trim())}`
+          `https://deepskyblue-chinchilla-933370.hostingersite.com/hardware_system_backend/get_material_by_qr.php?qrCode=${encodeURIComponent(result.trim())}`
         );
         const data = await response.json();
         if (response.ok) {

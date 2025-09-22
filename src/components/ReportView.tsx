@@ -46,6 +46,10 @@ export default function ReportView({ canModify }: ReportViewProps) {
       const materialsData = await materialsResponse.json();
       setMaterials(materialsData.map((material: any) => ({
         ...material,
+        unitCost: parseFloat(material.unitCost) || 0,
+        quantity: parseInt(material.quantity) || 0,
+        currentStock: parseInt(material.currentStock) || 0,
+        minStockLevel: parseInt(material.minStockLevel) || 0,
         lastUpdated: new Date(material.lastUpdated)
       })));
 
@@ -54,6 +58,7 @@ export default function ReportView({ canModify }: ReportViewProps) {
       const transactionsData = await transactionsResponse.json();
       setTransactions(transactionsData.map((t: any) => ({
         ...t,
+        quantity: parseInt(t.quantity) || 0,
         timestamp: new Date(t.timestamp)
       })));
 
